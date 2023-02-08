@@ -1,5 +1,7 @@
-# Introduction
+# ShakeLog
+<img src="images/demo.png" width="25%" />		<img src="images/shakelog.png" width="25%" />
 
+#Introduction
 A shake log library for logging key-value based events and errors in Android applications. This library allows you to view the logs by simply shaking the device.
 This library aims to be easier to integrate into your apps and workflows:
 
