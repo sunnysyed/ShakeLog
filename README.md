@@ -21,11 +21,11 @@ This library aims to be easier to integrate into your apps and workflows:
 
 	```kotlin
 	class CustomApplication : Application {
-		override fun onCreate() {
-        	super.onCreate()
-        	ShakeLog.init(this)
-    	}
-	}
+        override fun onCreate() {
+            super.onCreate()
+            ShakeLog.init(this)
+        }
+    }
 	```
 3. To log an event after you have initialized `ShakeLog` call `logEvent`
 	```kotlin
