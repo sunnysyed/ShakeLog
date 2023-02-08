@@ -18,6 +18,7 @@ class LogActivity : AppCompatActivity() {
     private var log: ArrayList<LogItem> = arrayListOf()
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.shake_log_theme)
         setContentView(R.layout.shake_log_activity)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Shake Log"
