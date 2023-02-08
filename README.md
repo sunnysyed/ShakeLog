@@ -11,9 +11,9 @@ This library aims to be easier to integrate into your apps and workflows:
 
 1. Specify ShakeLog as a dependency in your build.gradle file:
 
-	```none
+	```gradle
 	dependencies {
-	    implementation("com.github.sunny:shakelog:{latest-version}")
+	    implementation("com.github.sunnysyed:ShakeLog:{latest-version}")
 	}
 	```
 
