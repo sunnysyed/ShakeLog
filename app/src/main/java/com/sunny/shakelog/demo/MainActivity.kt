@@ -25,8 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 Surface(
-                    shape = RectangleShape,
-                    color = MaterialTheme.colors.background
+                    shape = RectangleShape, color = MaterialTheme.colors.background
                 ) {
                     Counter()
                 }
@@ -41,21 +40,19 @@ fun Counter() {
     val counter = remember {
         mutableStateOf(value = 0)
     }
-    Scaffold(
-        topBar = {
-            TopAppBar() {
-                Text("Counter App")
-            }
+    Scaffold(topBar = {
+        TopAppBar() {
+            Text("Counter App")
+        }
 
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                ShakeLog.logEvent("Click", counter.value.toString())
-                counter.value++
-            }) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-            }
-        },
+    }, floatingActionButton = {
+        FloatingActionButton(onClick = {
+            ShakeLog.logEvent("Click", counter.value.toString())
+            counter.value++
+        }) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+        }
+    },
 
         content = {
             Column(
@@ -77,8 +74,7 @@ fun Counter() {
                     Text(text = "Clear Log");
                 }
             }
-        }
-    )
+        })
 
 
 }

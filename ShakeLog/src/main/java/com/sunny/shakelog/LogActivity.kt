@@ -24,6 +24,9 @@ class LogActivity : AppCompatActivity() {
         supportActionBar?.title = "Shake Log"
         supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, android.R.color.black)))
         intent.extras?.getParcelableArrayList<LogItem>(SHAKE_LOG)?.let {
+            if (intent.getSerializableExtra(SHAKE_LOG_SORT_DIRECTION) == ShakeLogSortDirection.Descending) {
+                it.reverse()
+            }
             log = it
         }
         recyclerView.apply {

@@ -48,8 +48,7 @@ class ShakeDetector(private val listener: Listener) : SensorEventListener {
      */
     @JvmOverloads
     fun start(
-        sensorManager: SensorManager,
-        sensorDelay: Int = SensorManager.SENSOR_DELAY_UI
+        sensorManager: SensorManager, sensorDelay: Int = SensorManager.SENSOR_DELAY_UI
     ): Boolean {
         // Already started?
         if (accelerometer != null) {

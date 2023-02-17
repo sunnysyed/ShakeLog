@@ -10,13 +10,19 @@ import android.os.Parcel
 import android.os.Parcelable
 import java.util.*
 
-const val SHAKE_LOG = "share_log"
+const val SHAKE_LOG = "shake_log"
+const val SHAKE_LOG_SORT_DIRECTION = "shake_log_sort_direction"
+
+enum class ShakeLogSortDirection {
+    Ascending, Descending
+}
 
 class ShakeLog private constructor(private val application: Application) : ShakeDetector.Listener {
     private val logger: Logger = Logger(BuildConfig.DEBUG)
     private var log: ArrayList<LogItem> = arrayListOf()
     private val activityReferenceManager = ActivityReferenceManager()
     private var logOpened = false
+    var sortDirection: ShakeLogSortDirection = ShakeLogSortDirection.Descending
     private val simpleActivityLifecycleCallback: SimpleActivityLifecycleCallback =
         object : SimpleActivityLifecycleCallback() {
             override fun onActivityResumed(activity: Activity) {
@@ -27,8 +33,7 @@ class ShakeLog private constructor(private val application: Application) : Shake
 
     init {
         application.registerActivityLifecycleCallbacks(simpleActivityLifecycleCallback);
-        val sensorManager =
-            application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val shakeDetector = ShakeDetector(this)
         val didStart = shakeDetector.start(sensorManager)
         if (didStart) {
@@ -46,13 +51,12 @@ class ShakeLog private constructor(private val application: Application) : Shake
     }
 
     private fun openLog() {
-        activityReferenceManager.validatedActivity?.startActivity(
-            Intent(
-                application.applicationContext,
-                LogActivity::class.java
-            ).apply {
-                putParcelableArrayListExtra(SHAKE_LOG, log)
-            })
+        activityReferenceManager.validatedActivity?.startActivity(Intent(
+            application.applicationContext, LogActivity::class.java
+        ).apply {
+            putParcelableArrayListExtra(SHAKE_LOG, log)
+            putExtra(SHAKE_LOG_SORT_DIRECTION, sortDirection)
+        })
     }
 
     private fun logEvent(key: String, value: String) {
@@ -64,19 +68,23 @@ class ShakeLog private constructor(private val application: Application) : Shake
     }
 
     companion object {
-        @SuppressLint("StaticFieldLeak") // we're holding the application context.
+        @SuppressLint("StaticFieldLeak")
         private var sharedInstance: ShakeLog? = null
 
         /**
          * @param application the embedding application
          * @return the singleton `ShakeLog` instance
          */
-        fun init(application: Application): ShakeLog {
+        fun init(
+            application: Application,
+            sortDirection: ShakeLogSortDirection = ShakeLogSortDirection.Descending
+        ): ShakeLog {
             synchronized(ShakeLog::class.java) {
                 if (sharedInstance == null) {
                     sharedInstance = ShakeLog(application)
                 }
             }
+            setSortDirection(sortDirection)
             return (sharedInstance)!!
         }
 
@@ -103,18 +111,18 @@ class ShakeLog private constructor(private val application: Application) : Shake
                 sharedInstance?.openLog()
             }
         }
+
+        fun setSortDirection(sortDirection: ShakeLogSortDirection = ShakeLogSortDirection.Descending) {
+            sharedInstance?.sortDirection = sortDirection
+        }
     }
 }
 
 internal data class LogItem(
-    val key: String,
-    val value: String,
-    val unixTime: Long = Date().time
+    val key: String, val value: String, val unixTime: Long = Date().time
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readLong()
+        parcel.readString()!!, parcel.readString()!!, parcel.readLong()
     ) {
     }
 
